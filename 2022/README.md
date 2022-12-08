@@ -7,5 +7,6 @@
 - [Day 4: Camp Cleanup](https://github.com/blauentag/AdventOfCode/tree/main/2022/day_04)
 - [Day 5: Supply Stacks](https://github.com/blauentag/AdventOfCode/tree/main/2022/day_05)
 - [Day 6: Tuning Trouble](https://github.com/blauentag/AdventOfCode/tree/main/2022/day_06)
+- [Day 7: ](https://github.com/blauentag/AdventOfCode/tree/main/2022/day_07)
 
 
