@@ -7,10 +7,9 @@ defmodule RuckSackPack do
 
   def adjustment(item) do
     # 'A' == [39], 'a' == [97]
-    if item < 96 do
-      -38
-    else
-      -96
+    cond do
+      item < 96 -> -38
+      true -> -96
     end
   end
 

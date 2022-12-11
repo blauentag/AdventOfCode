@@ -14,7 +14,6 @@ defmodule RopeBridge do
 
   def move(direction, mover) do
     {mx, my} = mover
-
     case direction do
       "D" -> {mx, my - 1}
       "L" -> {mx - 1, my}
@@ -23,55 +22,53 @@ defmodule RopeBridge do
     end
   end
 
+  def direct(previous_knot, knot) do
+    {hx, hy} = previous_knot
+    {tx, ty} = knot
+    cond do
+      hx == tx and (hy - ty) <= -2 -> move("D", knot)
+      (hx - tx) <= -2 and hy == ty -> move("L", knot)
+      (hx - tx) >= 2 and hy == ty -> move("R", knot)
+      hx == tx and (hy - ty) >= 2 -> move("U", knot)
+      ((hx < tx) and (hy - ty) == -2) or ((hx - tx) == -2 and (hy < ty)) -> move("D", knot) |> then(&move("L", &1))
+      ((hx > tx) and (hy - ty) == -2) or ((hx - tx) == 2 and (hy < ty)) -> move("D", knot) |> then(&move("R", &1))
+      ((hx - tx) == -2 and (hy > ty)) or ((hx < tx) and (hy - ty) == 2) -> move("L", knot) |> then(&move("U", &1))
+      ((hx - tx) == 2 and (hy > ty)) or ((hx > tx) and (hy - ty) == 2) -> move("R", knot) |> then(&move("U", &1))
+    end
+  end
+
+  def previous(knot, index, knots) do
+    previous_knot = Enum.at(knots, index - 1)
+    cond do
+      touching?(previous_knot, knot) -> knot
+      true -> direct(previous_knot, knot)
+    end
+    |> then(&List.replace_at(knots, index, &1))
+  end
+
   def motions(locations, direction) do
     locations[:knots]
     |> Enum.with_index()
     |> Enum.reduce(locations[:knots], fn {knot, index}, knots ->
-      if index == 0 do
-        List.replace_at(knots, index, move(direction, knot))
-      else
-        previous_knot = Enum.at(knots, index - 1)
-        if touching?(previous_knot, knot) do
-          knot
-        else
-          {hx, hy} = previous_knot
-          {tx, ty} = knot
-          cond do
-            hx == tx and (hy - ty) <= -2 -> move("D", knot)
-            (hx - tx) <= -2 and hy == ty -> move("L", knot)
-            (hx - tx) >= 2 and hy == ty -> move("R", knot)
-            hx == tx and (hy - ty) >= 2 -> move("U", knot)
-            ((hx < tx) and (hy - ty) == -2) or ((hx - tx) == -2 and (hy < ty)) -> move("D", knot) |> then(&move("L", &1))
-            ((hx > tx) and (hy - ty) == -2) or ((hx - tx) == 2 and (hy < ty)) -> move("D", knot) |> then(&move("R", &1))
-            ((hx - tx) == -2 and (hy > ty)) or ((hx < tx) and (hy - ty) == 2) -> move("L", knot) |> then(&move("U", &1))
-            ((hx - tx) == 2 and (hy > ty)) or ((hx > tx) and (hy - ty) == 2) -> move("R", knot) |> then(&move("U", &1))
-          end
-        end
-        |> then(&List.replace_at(knots, index, &1))
+      cond do
+        index == 0 -> List.replace_at(knots, index, move(direction, knot))
+        true -> previous(knot, index, knots)
       end
     end)
   end
 
   def moves(movement, locations) do
     [direction, steps] = movement
-
     Enum.reduce(1..steps, locations, fn _step, positions ->
       motions(positions, direction)
-      |> then(
-        &%{
-          knots: &1,
-          visited: positions[:visited] ++ [List.last(&1)]
-        }
-      )
+      |> then(&%{ knots: &1, visited: positions[:visited] ++ [List.last(&1)]})
     end)
   end
 
   def positions_visited(number_of_knots) do
-    knots = for _x <- 1..number_of_knots, do: {0, 0}
-    locations = %{knots: knots, visited: []}
-
     head_movements()
-    |> Enum.reduce(locations, fn movement, positions -> moves(movement, positions) end)
+    |> Enum.reduce(%{knots: (for _x <- 1..number_of_knots, do: {0, 0}), visited: []},
+    fn movement, positions -> moves(movement, positions) end)
     |> then(& &1[:visited])
     |> Enum.uniq()
     |> Enum.count()

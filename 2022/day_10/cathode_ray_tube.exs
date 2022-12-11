@@ -4,44 +4,60 @@ defmodule CathodeRayTube do
     |> String.split("\n", trim: true)
   end
 
+  def addx_strength(instruction, cycle, strength, strengths) do
+    instruction
+    |> Enum.reduce({cycle, strength, strengths}, fn step, signal ->
+      {cycle, strength, strengths} = signal
+      steps(step, cycle, strength, strengths)
+    end)
+  end
+
+  def bucket?(cycle) do
+    Enum.member?([20, 60, 100, 140, 180, 220], cycle)
+  end
+
+  def noop_strength(cycle, strength, strengths) do
+    cycle = cycle + 1
+
+    cond do
+      bucket?(cycle) -> {cycle, strength, List.insert_at(strengths, -1, cycle * strength)}
+      true -> {cycle, strength, strengths}
+    end
+  end
+
+  def op_strength(cycle, strength, strengths, step) do
+    cycle = cycle + 1
+
+    cond do
+      bucket?(cycle) -> {cycle, strength + step, List.insert_at(strengths, -1, cycle * strength)}
+      true -> {cycle, strength + step, strengths}
+    end
+  end
+
+  def parse(instruction, cycle, strength, strengths) do
+    instruction
+    |> String.split(" ", trim: true)
+    |> then(&case &1 do
+        [addx, int] -> addx_strength([addx, int], cycle, strength, strengths)
+        [_] -> noop_strength(cycle, strength, strengths)
+      end)
+  end
+
+  def steps(step, cycle, strength, strengths) do
+    cond do
+      Regex.match?(~r{\A(\d+|-\d+)\z}, step) ->
+        op_strength(cycle, strength, strengths, String.to_integer(step))
+
+      true ->
+        noop_strength(cycle, strength, strengths)
+    end
+  end
+
   def sum_signal_strengths() do
     instructions()
     |> Enum.reduce({0, 1, []}, fn instruction, signal ->
       {cycle, strength, strengths} = signal
-
-      if instruction == "noop" do
-        cycle = cycle + 1
-
-        if Enum.member?([20, 60, 100, 140, 180, 220], cycle) do
-          {cycle, strength, List.insert_at(strengths, -1, cycle * strength)}
-        else
-          {cycle, strength, strengths}
-        end
-      else
-        String.split(instruction, " ", trim: true)
-        |> Enum.reduce(signal, fn add_x, value ->
-          {cycle, strength, strengths} = value
-
-          if Regex.match?(~r{\A(\d+|-\d+)\z}, add_x) do
-            cycle = cycle + 1
-            cycled_strength = strength + String.to_integer(add_x)
-
-            if Enum.member?([20, 60, 100, 140, 180, 220], cycle) do
-              {cycle, cycled_strength, List.insert_at(strengths, -1, cycle * strength)}
-            else
-              {cycle, cycled_strength, strengths}
-            end
-          else
-            cycle = cycle + 1
-
-            if Enum.member?([20, 60, 100, 140, 180, 220], cycle) do
-              {cycle, strength, List.insert_at(strengths, -1, cycle * strength)}
-            else
-              {cycle, strength, strengths}
-            end
-          end
-        end)
-      end
+      parse(instruction, cycle, strength, strengths)
     end)
     |> then(&elem(&1, 2))
     |> Enum.sum()
@@ -70,8 +86,33 @@ defmodule CathodeRayTube do
     end)
   end
 
-  def screen do
-    for _x <- 0..5, do: for(_x <- 0..39, do: ".")
+  def addx(instruction, cycle, sprite, viewport, x) do
+    instruction
+    |> Enum.reduce({cycle, x, viewport}, fn step, screen ->
+      {cycle, x, viewport} = screen
+      stepped_instructions(step, cycle, sprite, viewport, x)
+    end)
+  end
+
+  def instruct(instruction, cycle, sprite, viewport, x) do
+    instruction
+    |> String.split(" ", trim: true)
+    |> then(
+      &case &1 do
+        [addx, int] -> addx([addx, int], cycle, sprite, viewport, x)
+        [_] -> noop(cycle, sprite, viewport, x)
+      end
+    )
+  end
+
+  def noop(cycle, sprite, viewport, x) do
+    next_cycle = cycle + 1
+
+    if Enum.member?(sprite, rem(cycle, 40)) do
+      {next_cycle, x, update(viewport, cycle)}
+    else
+      {next_cycle, x, viewport}
+    end
   end
 
   def print do
@@ -79,39 +120,24 @@ defmodule CathodeRayTube do
     |> Enum.reduce({0, 1, screen()}, fn instruction, screen ->
       {cycle, x, viewport} = screen
       sprite = (x - 1)..(x + 1)
-
-      if instruction == "noop" do
-        next_cycle = cycle + 1
-
-        if Enum.member?(sprite, rem(cycle, 40)) do
-          {next_cycle, x, update(viewport, cycle)}
-        else
-          {next_cycle, x, viewport}
-        end
-      else
-        String.split(instruction, " ", trim: true)
-        |> Enum.reduce(screen, fn step, value ->
-          {cycle, x, viewport} = value
-          next_cycle = cycle + 1
-
-          if Regex.match?(~r{\A(\d+|-\d+)\z}, step) do
-            if Enum.member?(sprite, rem(cycle, 40)) do
-              {next_cycle, x + String.to_integer(step), update(viewport, cycle)}
-            else
-              {next_cycle, x + String.to_integer(step), viewport}
-            end
-          else
-            if Enum.member?(sprite, rem(cycle, 40)) do
-              {next_cycle, x, update(viewport, cycle)}
-            else
-              {next_cycle, x, viewport}
-            end
-          end
-        end)
-      end
+      instruct(instruction, cycle, sprite, viewport, x)
     end)
     |> then(&elem(&1, 2))
     |> Enum.each(fn row -> IO.puts(row) end)
+  end
+
+  def screen do
+    for _x <- 0..5, do: for(_x <- 0..39, do: ".")
+  end
+
+  def stepped_instructions(instruction, cycle, sprite, viewport, x) do
+    cond do
+      Regex.match?(~r{\A(\d+|-\d+)\z}, instruction) ->
+        noop(cycle, sprite, viewport, x + String.to_integer(instruction))
+
+      true ->
+        noop(cycle, sprite, viewport, x)
+    end
   end
 end
 
