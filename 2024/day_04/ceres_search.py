@@ -2,21 +2,28 @@
 
 import os
 
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.txt")) as file:
-    lines = [line.rstrip() for line in file]
 
-# lines = [
-# "MMMSXXMASM",
-# "MSAMXMSMSA",
-# "AMXSXMAAMM",
-# "MSAMASMSMX",
-# "XMASAMXAMM",
-# "XXAMMXXAMA",
-# "SMSMSASXSS",
-# "SAXAMASAAA",
-# "MAMMMXMMMM",
-# "MXMXAXMASX",
-# ]
+def lines():
+    with open(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "input.txt")
+    ) as file:
+        lines = [line.rstrip() for line in file]
+
+    # lines = [
+    # "MMMSXXMASM",
+    # "MSAMXMSMSA",
+    # "AMXSXMAAMM",
+    # "MSAMASMSMX",
+    # "XMASAMXAMM",
+    # "XXAMMXXAMA",
+    # "SMSMSASXSS",
+    # "SAXAMASAAA",
+    # "MAMMMXMMMM",
+    # "MXMXAXMASX",
+    # ]
+
+    return [list(line) for line in lines]
+
 
 XMAS = "XMAS"
 SAMX = "SAMX"
@@ -94,44 +101,66 @@ def get_diagonals_right_to_left(list_of_lists):
 
 def is_x_mas(lines, row_index, column_index):
     x_mas = ["MAS", "SAM"]
-    ltr = lines[row_index - 1][column_index - 1] + \
-          lines[row_index][column_index] + \
-          lines[row_index + 1][column_index + 1]
-    rtl = lines[row_index + 1][column_index - 1] + \
-          lines[row_index][column_index] + \
-          lines[row_index - 1][column_index + 1]
+    ltr = (
+        lines[row_index - 1][column_index - 1]
+        + lines[row_index][column_index]
+        + lines[row_index + 1][column_index + 1]
+    )
+    rtl = (
+        lines[row_index + 1][column_index - 1]
+        + lines[row_index][column_index]
+        + lines[row_index - 1][column_index + 1]
+    )
 
     return ltr in x_mas and rtl in x_mas
 
 
-xmas_count = 0
-lines = [list(line) for line in lines]
-for line in lines:
-    xmas_count += holds_xmas(line)
+def part_1(lines):
+    return (
+        sum([holds_xmas(line) for line in lines])
+        + sum([holds_xmas(line) for line in get_columns(lines)])
+        + sum([holds_xmas(line) for line in get_diagonals_left_to_right(lines)])
+        + sum([holds_xmas(line) for line in get_diagonals_right_to_left(lines)])
+    )
 
-for line in get_columns(lines):
-    xmas_count += holds_xmas(line)
 
-for line in get_diagonals_left_to_right(lines):
-    xmas_count += holds_xmas(line)
+def is_x(char, lines, row_index, column_index, column_count):
+    if column_index in (0, column_count - 1):
+        return 0
 
-for line in get_diagonals_right_to_left(lines):
-    xmas_count += holds_xmas(line)
+    if char != "A":
+        return 0
 
-print(f"Part 1: {xmas_count}")
+    if is_x_mas(lines, row_index, column_index):
+        return 1
 
-x_mas_count = 0
-row_count = len(lines)
-column_count = len(lines[0])
-for row_index, line in enumerate(lines):
+    return 0
+
+
+def find_x(line, lines, row_index, row_count, column_count):
     if row_index in (0, row_count - 1):
-        continue
-    for column_index, char in enumerate(line):
-        if column_index in (0, column_count - 1):
-            continue
-        if char != "A":
-            continue
-        if is_x_mas(lines, row_index, column_index):
-            x_mas_count += 1
+        return 0
 
-print(f"Part 2: {x_mas_count}")
+    return sum(
+        [
+            is_x(char, lines, row_index, column_index, column_count)
+            for column_index, char in enumerate(line)
+        ]
+    )
+
+
+def part_2(lines):
+    row_count = len(lines)
+    column_count = len(lines[0])
+
+    return sum(
+        [
+            find_x(line, lines, row_index, row_count, column_count)
+            for row_index, line in enumerate(lines)
+        ]
+    )
+
+
+print(f"Part 1: {part_1(lines())}")
+
+print(f"Part 2: {part_2(lines())}")
