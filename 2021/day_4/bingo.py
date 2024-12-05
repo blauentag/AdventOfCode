@@ -31,7 +31,7 @@ for number in number_call:
     if bingo:
         break
     for card in cards:
-        if bingo
+        if bingo:
             break
         for index, bingo_opportunity in enumerate(card):
             if number in bingo_opportunity:

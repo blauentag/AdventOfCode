@@ -66,8 +66,9 @@ off x=-37810..49457,y=-71013..-7894,z=-105357..-13188
 off x=-27365..46395,y=31009..98017,z=15428..76570
 off x=-70369..-16548,y=22648..78696,z=-1892..86821
 on x=-53470..21291,y=-120233..-33476,z=-44150..38147
-off x=-93533..-4276,y=-16170..68771,z=-104985..-24507""".split("\n")
-
+off x=-93533..-4276,y=-16170..68771,z=-104985..-24507""".split(
+    "\n"
+)
 
 
 # input = """on x=-20..26,y=-36..17,z=-47..7
@@ -102,6 +103,7 @@ off x=-93533..-4276,y=-16170..68771,z=-104985..-24507""".split("\n")
 #     "\n"
 # )
 
+
 def in_range(cuboid_temp):
     if -50 > cuboid_temp[0][0] or cuboid_temp[0][0] > 50:
         return False
@@ -117,6 +119,7 @@ def in_range(cuboid_temp):
         return False
     else:
         return True
+
 
 steps = []
 for line in input:
@@ -153,20 +156,18 @@ def overlapping(cuboid_1, cuboid_2):
         )
     )
 
+
 def add(cuboid_1, cuboid_2):
     max_min_x = max(cuboid_2[0][0], cuboid_2[1][0])
     max_min_y = max(cuboid_2[0][1], cuboid_2[1][1])
-    x_cuboid = [
-        [max_min_x, cuboid_2[0][1], cuboid_2[0][2]],
-        cuboid_2[1]
-    ]
+    x_cuboid = [[max_min_x, cuboid_2[0][1], cuboid_2[0][2]], cuboid_2[1]]
     y_cuboid = [
         [cuboid_2[0][0], max_min_y, cuboid_2[0][2]],
-        [max_min_x - 1, cuboid_2[1][1], cuboid_2[1][2]]
+        [max_min_x - 1, cuboid_2[1][1], cuboid_2[1][2]],
     ]
     z_cuboid = [
         [cuboid_2[0][0], cuboid_2[0][1], max(cuboid_2[0][2], cuboid_2[1][2])],
-        [max_min_x - 1, max_min_y - 1, cuboid_2[1][2]]
+        [max_min_x - 1, max_min_y - 1, cuboid_2[1][2]],
     ]
 
     # print()
@@ -180,17 +181,14 @@ def add(cuboid_1, cuboid_2):
 def subtract(cuboid_1, cuboid_2):
     max_min_x = max(cuboid_2[0][0], cuboid_2[1][0])
     max_min_y = max(cuboid_2[0][1], cuboid_2[1][1])
-    x_cuboid = [
-        [max_min_x, cuboid_2[0][1], cuboid_2[0][2]],
-        cuboid_2[1]
-    ]
+    x_cuboid = [[max_min_x, cuboid_2[0][1], cuboid_2[0][2]], cuboid_2[1]]
     y_cuboid = [
         [cuboid_2[0][0], max_min_y, cuboid_2[0][2]],
-        [max_min_x - 1, cuboid_2[1][1], cuboid_2[1][2]]
+        [max_min_x - 1, cuboid_2[1][1], cuboid_2[1][2]],
     ]
     z_cuboid = [
         [cuboid_2[0][0], cuboid_2[0][1], max(cuboid_2[0][2], cuboid_2[1][2])],
-        [max_min_x - 1, max_min_y - 1, cuboid_2[1][2]]
+        [max_min_x - 1, max_min_y - 1, cuboid_2[1][2]],
     ]
 
     # print()
@@ -212,6 +210,7 @@ def volume(currently_on):
     # print("volumes:\t", volumes)
     return sum(volumes)
 
+
 # part 1
 # currently_on = set()
 # for step in steps:
@@ -229,7 +228,6 @@ def volume(currently_on):
 #                         currently_on.remove(tuple([x, y, z]))
 
 # print(len(currently_on))
-
 
 
 steps = []
@@ -266,7 +264,7 @@ for step in steps:
                     break
     else:
         for cuboid in currently_on.copy():
-            if overlapping(cuboid, step[1]): 
+            if overlapping(cuboid, step[1]):
                 currently_on.remove(cuboid)
                 currently_on += subtract(cuboid, step[1])
 

@@ -29,7 +29,7 @@ class Cave:
         return self.name <= other.name
 
     def __repr__(self):
-        return f"{self.name} -> " if self.name != 'end' else f"{self.name}"
+        return f"{self.name} -> " if self.name != "end" else f"{self.name}"
 
     def __str__(self):
         return f"{self.name} -> visited: {self.visited}, one_visit_only: {self.one_visit_only}, passages: {self.passages}"
@@ -38,10 +38,10 @@ class Cave:
         return not (self.one_visit_only and self.visited)
 
     def is_end(self):
-        return self.name == 'end'
+        return self.name == "end"
 
     def visit(self):
-        self.visited = True if self.name != 'end' else False
+        self.visited = True if self.name != "end" else False
 
 
 class Route:
@@ -65,7 +65,11 @@ class Route:
         return self.path[-1]
 
     def used(self):
-        small_caves = [cave.name for cave in self.path if cave.name[0].islower() and cave.name != 'start']
+        small_caves = [
+            cave.name
+            for cave in self.path
+            if cave.name[0].islower() and cave.name != "start"
+        ]
         return len(small_caves) > len(set(small_caves)) + 1
 
 
@@ -94,11 +98,11 @@ with open("./input.txt", "r") as fs:
 
 cave_set = set(cave for passage in cave_passage_list for cave in passage)
 
-passages_map = {cave:Cave(cave) for (cave) in cave_set}
+passages_map = {cave: Cave(cave) for (cave) in cave_set}
 for passage in cave_passage_list:
-    if passage[1] != 'start' and passage[0] != 'end':
+    if passage[1] != "start" and passage[0] != "end":
         passages_map[passage[0]].passages.append(passage[1])
-    if passage[0] != 'start' and passage[1] != 'end':
+    if passage[0] != "start" and passage[1] != "end":
         passages_map[passage[1]].passages.append(passage[0])
 
 
@@ -134,14 +138,16 @@ class PathFinder:
         mq.put(len(self.paths))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     multiprocessing.freeze_support()
 
     path_finder = PathFinder(passages_map)
     jobs = []
     queue = multiprocessing.Queue()
-    for name in ['D', 'f', 'g']:
-        p = multiprocessing.Process(target=path_finder.find, args=(name, queue), name=name)
+    for name in ["D", "f", "g"]:
+        p = multiprocessing.Process(
+            target=path_finder.find, args=(name, queue), name=name
+        )
         jobs.append(p)
         p.start()
         for j in jobs:

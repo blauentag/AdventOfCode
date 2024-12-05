@@ -75,6 +75,4 @@ print(f"{rolls} * {losing_score} = {rolls * losing_score}")
 # print(multiverse_play())
 
 
-
-
 # 9225 < answer

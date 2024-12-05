@@ -44,10 +44,7 @@ scores = sorted(
     list(
         map(
             bracket_scoring,
-            map(
-                closers,
-                [stack for stack in map(open_brackets, lines) if stack]
-                )
+            map(closers, [stack for stack in map(open_brackets, lines) if stack]),
         )
     )
 )

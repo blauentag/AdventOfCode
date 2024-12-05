@@ -15,7 +15,7 @@ class Cave:
         return self.name == other.name
 
     def __repr__(self):
-        return f"{self.name} -> " if self.name != 'end' else f"{self.name}"
+        return f"{self.name} -> " if self.name != "end" else f"{self.name}"
 
     def __str__(self):
         return f"{self.name} -> visited: {self.visited}, one_visit_only: {self.one_visit_only}, passages: {self.passages}"
@@ -24,10 +24,10 @@ class Cave:
         return not (self.one_visit_only and self.visited)
 
     def is_end(self):
-        return self.name == 'end'
+        return self.name == "end"
 
     def visit(self):
-        self.visited = True if self.name != 'end' else False
+        self.visited = True if self.name != "end" else False
 
 
 with open("./input.txt", "r") as fs:
@@ -55,14 +55,14 @@ with open("./input.txt", "r") as fs:
 
 cave_set = set(cave for passage in cave_passage_list for cave in passage)
 
-passages_map = {cave:Cave(cave) for (cave) in cave_set}
+passages_map = {cave: Cave(cave) for (cave) in cave_set}
 for passage in cave_passage_list:
-    if passage[1] != 'start' and passage[0] != 'end':
+    if passage[1] != "start" and passage[0] != "end":
         passages_map[passage[0]].passages.append(passage[1])
-    if passage[0] != 'start' and passage[1] != 'end':
+    if passage[0] != "start" and passage[1] != "end":
         passages_map[passage[1]].passages.append(passage[0])
 
-for _,cave in passages_map.items():
+for _, cave in passages_map.items():
     print(cave)
 print()
 
@@ -76,7 +76,7 @@ class PathFinder:
     def find(self):
         q = deque()
         path = []
-        path.append(self.caves['start'])
+        path.append(self.caves["start"])
         q.append(path.copy())
         caves = self.caves.copy()
 
@@ -103,7 +103,6 @@ class PathFinder:
                         print(len(newpath))
                         q.append(newpath)
                         print(f"----- {cave} -> {path}")
-
 
 
 path_finder = PathFinder(passages_map)

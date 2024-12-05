@@ -4,6 +4,7 @@ import cProfile
 
 ITERATIONS = 40
 
+
 class ExtndedPolymerization:
 
     def __init__(self, polymer_template, element_pairs):
@@ -11,8 +12,13 @@ class ExtndedPolymerization:
         self.element_pairs = element_pairs
         self.magnitude_map = element_pairs.copy()
         self.base_counts_map = element_pairs.copy()
-        self.counts_map = {char: 0 for char in set(list(self.polymer_template) + [char for string in self.element_pairs.values() for char in string])}
-
+        self.counts_map = {
+            char: 0
+            for char in set(
+                list(self.polymer_template)
+                + [char for string in self.element_pairs.values() for char in string]
+            )
+        }
 
     def base_cases(self, iterations):
         for key, polymer in self.magnitude_map.items():
@@ -20,16 +26,23 @@ class ExtndedPolymerization:
             for i in range(int(iterations / 2) - 1):
                 self.magnitude_map[key] = self.polymeraze(self.magnitude_map[key])
 
-    
     def base_count(self):
         for template in self.element_pairs:
-            counts_map = {char: 0 for char in set(list(self.polymer_template) + [char for string in self.element_pairs.values() for char in string])}
+            counts_map = {
+                char: 0
+                for char in set(
+                    list(self.polymer_template)
+                    + [
+                        char
+                        for string in self.element_pairs.values()
+                        for char in string
+                    ]
+                )
+            }
             for char in self.magnitude_map[template]:
                 counts_map[char] += 1
 
             self.base_counts_map[template] = counts_map
-
-
 
     def count(self, chain):
         for index, template in enumerate(self.templates(chain)):
@@ -38,21 +51,22 @@ class ExtndedPolymerization:
             if index > 0:
                 self.counts_map[template[0]] -= 1
 
-
     def chain(self):
         polymers = []
         for index, template in enumerate(self.templates()):
-            polymers.append(self.magnitude_map[template][1:] if index > 0 else self.magnitude_map[template])
+            polymers.append(
+                self.magnitude_map[template][1:]
+                if index > 0
+                else self.magnitude_map[template]
+            )
 
         return "".join(polymers)
-
 
     def chain_polymers(self, iterations):
         self.base_cases(iterations)
         self.base_count()
         self.count(self.chain())
         print(self.max_minus_min())
-
 
     # def print_chain(self):
     #     polymers = []
@@ -62,8 +76,6 @@ class ExtndedPolymerization:
 
     #     return "".join(polymers)
 
-
-
     def polymeraze(self, polymer):
         blocks = [polymer[0]]
         for i in range(len(polymer) - 1):
@@ -71,15 +83,12 @@ class ExtndedPolymerization:
 
         return "".join(blocks)
 
-
-
     def templates(self, polymer_template=None):
         polymer_template = polymer_template or self.polymer_template
         return [
             chunk_0 + chunk_1
             for chunk_0, chunk_1 in zip(polymer_template, polymer_template[1:])
         ]
-
 
     def max_minus_min(self):
         max = {"max": 0}
@@ -110,7 +119,6 @@ class ExtndedPolymerization:
         return [polymer_template, element_pairs]
 
 
-
 if __name__ == "__main__":
     with open("./input.txt", "r") as fs:
         lines = fs.read().split("\n")
@@ -136,6 +144,5 @@ if __name__ == "__main__":
 
     polymer_template, element_pairs = ExtndedPolymerization.parse_lines(lines)
     polymerizer = ExtndedPolymerization(polymer_template, element_pairs)
-
 
     cProfile.run("polymerizer.chain_polymers(ITERATIONS)")

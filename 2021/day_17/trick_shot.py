@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class ProbeLauncher:
     def __init__(self):
         self.x_range, self.y_range = self.ranges()

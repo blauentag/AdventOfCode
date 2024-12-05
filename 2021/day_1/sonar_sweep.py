@@ -5,7 +5,7 @@ def convert(line):
     return int(str(line).strip())
 
 
-soundings = list(map(convert, open('./soundings.data').readlines()))
+soundings = list(map(convert, open("./soundings.data").readlines()))
 increases = 0
 
 

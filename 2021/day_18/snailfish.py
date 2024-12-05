@@ -14,8 +14,6 @@ input = """[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]
 )
 
 
-
-
 number = []
 for line in input:
     if not number:
@@ -30,7 +28,7 @@ def explode(num_list):
             explode(item)
 
 
-print(explode([7,[6,[5,[4,[3,2]]]]]))
+print(explode([7, [6, [5, [4, [3, 2]]]]]))
 
 
 print(number)

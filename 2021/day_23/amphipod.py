@@ -26,7 +26,10 @@ class Amphipod:
     def update_location(self, step: Node) -> None:
         position = self.DESTINATION if step.y > 1 else self.HALLWAY
         self.update_energy(self.x, self.y, step.x, step.y, position - self.position)
-        self.x, self.y, = (
+        (
+            self.x,
+            self.y,
+        ) = (
             step.x,
             step.y,
         )
