@@ -1,0 +1,9 @@
+[project]
+name = "AdventOfCode2025"
+version = "0.1.0"
+description = "Attempts at solving AoC 2025"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "black>=25.11.0",
+]

@@ -2,6 +2,7 @@
 
 import sys
 
+
 def password(filename):
     stops_on_zero = dial_points_to_zero = 0
     dial_position = 50
@@ -18,8 +19,9 @@ def password(filename):
 
             if 0 > distance:
                 dial_points_to_zero += (dial_position == 0) - dial_at_zero
-    
+
     return stops_on_zero, dial_points_to_zero
+
 
 if __name__ == "__main__":
     part_1, part_2 = password(sys.argv[1])
