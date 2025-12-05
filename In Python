@@ -1,0 +1,2 @@
+dial_rotations, dial_position = divmod(dial_position + distance, 100)
+dial_points_to_zero += abs(dial_rotations)

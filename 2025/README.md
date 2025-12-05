@@ -2,6 +2,7 @@
 ## [2025](https://adventofcode.com/2025)
 
 - [Day 1: Secret Entrance](https://adventofcode.com/2025/day/1)
+  - [Elixir](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_01/secret_entrance.exs)
   - [Haskell](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_01/secret_entrance.hs)
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_01/secret_entrance.py)
 - [Day 2: Gift Shop](https://adventofcode.com/2025/day/2)
@@ -10,3 +11,6 @@
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_03/lobby.py)
 - [Day 4: Printing Department](https://adventofcode.com/2025/day/4)
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_04/printing_department.py)
+- [Day 5: Cafeteria](https://adventofcode.com/2025/day/5)
+  - [Elixir](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_05/cafeteria.exs)
+  - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_05/cafeteria.py)
