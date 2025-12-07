@@ -14,3 +14,5 @@
 - [Day 5: Cafeteria](https://adventofcode.com/2025/day/5)
   - [Elixir](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_05/cafeteria.exs)
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_05/cafeteria.py)
+- [Day 6: Trash Compactor](https://adventofcode.com/2025/day/6)
+  - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_06/trash_compactor.py)
