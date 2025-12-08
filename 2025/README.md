@@ -16,3 +16,5 @@
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_05/cafeteria.py)
 - [Day 6: Trash Compactor](https://adventofcode.com/2025/day/6)
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_06/trash_compactor.py)
+- [Day 7: Laboratories](https://adventofcode.com/2025/day/7)
+  - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_07/laboratories.py)
