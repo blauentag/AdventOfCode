@@ -18,3 +18,7 @@
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_06/trash_compactor.py)
 - [Day 7: Laboratories](https://adventofcode.com/2025/day/7)
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_07/laboratories.py)
+- [Day 8: Playground](https://adventofcode.com/2025/day/8)
+  - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_08/playground.py)
+- [Day 9: Movie Theater](https://adventofcode.com/2025/day/9)
+  - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_09/movie_theater.py)
