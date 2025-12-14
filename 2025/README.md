@@ -1,4 +1,5 @@
 # [Advent of Code](https://adventofcode.com)
+
 ## [2025](https://adventofcode.com/2025)
 
 - [Day 1: Secret Entrance](https://adventofcode.com/2025/day/1)
@@ -22,3 +23,7 @@
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_08/playground.py)
 - [Day 9: Movie Theater](https://adventofcode.com/2025/day/9)
   - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_09/movie_theater.py)
+- [Day 10: Factory](https://adventofcode.com/2025/day/10)
+- [Day 11: Reactor](https://adventofcode.com/2025/day/11)
+  - [Python](https://github.com/blauentag/AdventOfCode/blob/main/2025/day_11/reactor.py)
+- [Day 12: Christmas Tree Farm](https://adventofcode.com/2025/day/12)
